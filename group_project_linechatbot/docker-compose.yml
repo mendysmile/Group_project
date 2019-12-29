@@ -1,0 +1,137 @@
+version: '3.7'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    container_name: zookeeper
+    hostname: zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    ports:
+      - target: 9094
+        published: 9094
+        protocol: tcp
+        mode: host
+    environment:
+      HOSTNAME_COMMAND: "docker info | grep ^Name: | cut -d' ' -f 2"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://_{HOSTNAME_COMMAND}:9094
+      KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  flask:
+    build:
+      context: ./flask
+      dockerfile: dockerfile
+    container_name: flask
+    hostname: flask
+    ports:
+      - "5002:5002"
+    depends_on:
+      - kafka
+
+  line:
+    build:
+      context: ./line
+      dockerfile: dockerfile
+    container_name: line
+    hostname: line
+    ports:
+      - "15000:5000"
+    depends_on:
+      - kafka
+      - ngrok
+      
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.2.0
+    container_name: elasticsearch
+    hostname: elasticsearch
+    restart: unless-stopped
+    environment:
+      - cluster.name=docker-cluster
+      - node.name=node1
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms384m -Xmx384m"
+      - "discovery.zen.ping.unicast.hosts=elasticsearch2"
+      - "cluster.initial_master_nodes=node1"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./esdata:/root/linechatbot2/elasticsearch/data
+    ports:
+      - 9200:9200
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash-oss:7.2.0
+    command: -f /root/linechatbot2/logstash/pipeline/logstash-logspout.conf
+    container_name: logstash
+    hostname: logstash
+    restart: always
+    volumes:
+      - ./logstash/config/logstash.yml:/root/linechatbot2/logstash/config/logstash.yml:ro
+      - ./logstash/pipeline:/root/linechatbot2/logstash/pipeline:ro
+    ports:
+      - "127.0.0.1:15000:5000/udp"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    depends_on:
+      - elasticsearch
+
+  logspout:
+    image: bekt/logspout-logstash
+    container_name: logspout
+    hostname: logspout
+    restart: always
+    environment:
+      ROUTE_URIS: logstash+tcp://logstash:15000
+    depends_on:
+      - logstash
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana-oss:7.2.0
+    container_name: kibana
+    hostname: kibana
+    environment:
+      SERVER_NAME: kibana_server
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    ports:
+      - 5601:5601
+
+  ngrok:
+    image: wernight/ngrok
+    container_name: chatbot_ngrok
+    tty: true
+    stdin_open: true
+    ports:
+      - target: 4040
+        published: 54089
+        protocol: tcp
+        mode: host
+    depends_on:
+      - line
+    command: ngrok http --authtoken=*  line:5000
+
+  ngrok1:
+    image: wernight/ngrok
+    container_name: flask_ngrok
+    tty: true
+    stdin_open: true
+    ports:
+      - target: 4040
+        published: 54088
+        protocol: tcp
+        mode: host
+    depends_on:
+      - flask
+    command: ngrok http --authtoken=*  flask:5002
