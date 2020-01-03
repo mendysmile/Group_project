@@ -17,7 +17,7 @@ def error_cb(err):
 def index():
     if 'id' in request.cookies:
         id = request.cookies.get('id')
-        return render_template('card2.html',id=id)
+        return render_template('card2.html', id=id)
     else:
         uid = str(uuid.uuid1())
         resp = make_response(render_template('card2.html'))
@@ -131,6 +131,14 @@ def result(id):
 @app.route('/kibana')
 def kibana():
     return render_template('kibana.html')
+
+@app.route('/stay_point_map')
+def stay_point_map():
+    return render_template('stay_point_map.html')
+
+@app.route('/tracking_map')
+def tracking_map():
+    return render_template('tracking_map.html')
 
 if __name__ == "__main__":
     #app.run()

@@ -49,8 +49,6 @@ def callback():
         handler.handle(body, signature)
     except InvalidSignatureError:
         abort(400)
-    except LineBotApiError:
-        return HttpResponseBadRequest()
     return 'OK'
 
 def inputs(list_1):
@@ -151,12 +149,10 @@ def get_article_avgvector(wordlist):
             len_wordlist += 1
         except:
             pass
-
     if type(input_avgvector_matrix) == int:
         input_avgvector_matrix = np.matrix(wv_from_bin['購物'])
     else:
         input_avgvector_matrix = input_avgvector_matrix / len_wordlist
-
     return (input_avgvector_matrix)
 
 # 5.餘弦相似度
@@ -192,7 +188,7 @@ def manageRecommend(event, mtext):
 # 比對
 def cosine_similar_find_article(rlist, input_vector_matrix):
     articles_matrix_list = []
-    for b in range(5000):
+    for b in range(5594):
         result = cos_similar(input_vector_matrix, articles_matrix[b])
         articles_matrix_list.append(result)
     print("第", articles_matrix_list.index(max(articles_matrix_list)), "篇新聞最相似")
@@ -215,7 +211,7 @@ def manageLocation(event, latitude, longitude):
         line_bot_api.reply_message(event.reply_token, message)
     except:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
-def near_by_info(lat,lng):
+def near_by_info(lat, lng):
     store=[]
     addr=[]
     info=[]
@@ -226,19 +222,22 @@ def near_by_info(lat,lng):
         dist=geodesic(address,(lat,lng)).kilometers
         #若小於3公里
         if dist<3:
-            if len(store)<5:
-                store.append(df_store_list['store'][i])
-                if df_store_list['store'][i]=='屈臣氏':
-                    info.append('刷LINEPay卡5%回饋')
-                elif df_store_list['store'][i]=='美廉社':
-                    info.append('刷LINEPay卡2%回饋')
-                addr.append(df_store_list['address'][i])
-                distance.append(str(round(dist,2))+'km')
+            store.append(df_store_list['store'][i])
+            if df_store_list['store'][i]=='屈臣氏':
+                info.append('刷LINEPay卡5%回饋')
+            elif df_store_list['store'][i]=='美廉社':
+                info.append('刷LINEPay卡2%回饋')
+            addr.append(df_store_list['address'][i])
+            distance.append(str(round(dist,2))+'km')
     neardf = pd.DataFrame({'店家':store,'優惠內容':info,'地址':addr,'距離':distance},columns=['店家','優惠內容','地址','距離'])
     if len(neardf)==0:
         neardf = '附近沒有優惠店家'
         return neardf
-    else:
+    elif len(neardf)<=5:
+        neardf=str(neardf)
+        return neardf
+    elif len(neardf)>5:
+        neardf=neardf.sort_values(by='距離')[:5]
         neardf=str(neardf)
         return neardf
 
@@ -338,6 +337,46 @@ TextSendMessage(text="不知道哪張信用卡適合自己嗎？😥讓我們來
   )
 ]
 
+#統計資料
+reply_message_list_statics = [
+    TemplateSendMessage(
+     alt_text='Buttons template',
+      template=ButtonsTemplate(
+      title='使用者統計資訊',
+    text='觀看統計資訊',
+    actions=[
+      {
+        "type": "uri",
+        "label": "立即前往",
+        "uri": "http://.ngrok.io/kibana"
+      }
+    ],
+  )
+  )
+]
+
+#用戶行動軌跡
+reply_message_list_googlemap = [
+    TemplateSendMessage(
+     alt_text='Buttons template',
+      template=ButtonsTemplate(
+        title='用戶行動軌跡',
+        text='請點選您想觀看的行動軌跡資料',
+    actions=[
+      {
+        "type": "uri",
+        "label": "行動軌跡(不含停留點)",
+        "uri": "https://.ngrok.io/tracking_map"
+      },
+      {
+        "type": "uri",
+        "label": "行動軌跡(含停留點)",
+        "uri": "https://.ngrok.io/stay_point_map"
+      }
+    ],
+  )
+  )
+]
 '''
 
 設計一個字典
@@ -345,11 +384,13 @@ TextSendMessage(text="不知道哪張信用卡適合自己嗎？😥讓我們來
 
 '''
 
-# 根據自定義菜單四張故事線的圖，設定相對應訊息
+# 根據自定義菜單故事線的圖，設定相對應訊息
 template_message_dict = {
     "[::text:]請幫我預測核卡額度":reply_message_list_predict,
-    "[::text:]請給我信用卡相關新聞":reply_message_list_news,
+    "[::text:]請給我相關新聞":reply_message_list_news,
     "[::text:]請幫我推薦信用卡":reply_message_list_recommend,
+    "[::text:]請給我相關統計資料":reply_message_list_statics,
+    "[::text:]請給我用戶行動軌跡":reply_message_list_googlemap,
 }
 
 '''
@@ -375,7 +416,7 @@ def handle_message(event):
     elif event.message.text.find('@') != -1 and len(event.message.text) > 2:
         manageRecommend(event, event.message.text)
     elif event.message.text == "#旅遊優惠新聞":
-        article = pd.read_excel(r"./article_news_vector _final_30_1225.xlsx")
+        article = pd.read_excel(r"/app/article_news_vector _final_30_1225.xlsx")
         a = np.random.randint(len(np.array(article[article['label'] == 29]['content'])))
         text_1 = str(np.array(article[article['label'] == 29]['content'])[a])
         try:
@@ -386,7 +427,7 @@ def handle_message(event):
         except:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
     elif event.message.text == "#行動支付新聞":
-        article = pd.read_excel(r"./article_news_vector _final_30_1225.xlsx")
+        article = pd.read_excel(r"/app/article_news_vector _final_30_1225.xlsx")
         b = np.random.randint(len(np.array(article[article['label'] == 13]['content'])))
         text_1 = str(np.array(article[article['label'] == 13]['content'])[b])
         try:
@@ -397,7 +438,7 @@ def handle_message(event):
         except:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
     elif event.message.text == "#交通加油新聞":
-        article = pd.read_excel(r"./article_news_vector _final_30_1225.xlsx")
+        article = pd.read_excel(r"/app/article_news_vector _final_30_1225.xlsx")
         c = np.random.randint(len(np.array(article[article['label'] == 23]['content'])))
         text_1 = str(np.array(article[article['label'] == 23]['content'])[c])
         try:
@@ -408,7 +449,7 @@ def handle_message(event):
         except:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
     elif event.message.text == "#促銷活動新聞":
-        article = pd.read_excel(r"./article_news_vector _final_30_1225.xlsx")
+        article = pd.read_excel(r"/app/article_news_vector _final_30_1225.xlsx")
         d = np.random.randint(len(np.array(article[article['label'] == 0]['content'])))
         text_1 = str(np.array(article[article['label'] == 0]['content'])[d])
         try:
@@ -419,7 +460,7 @@ def handle_message(event):
         except:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
     elif event.message.text == "#繳費繳稅新聞":
-        article = pd.read_excel(r"./article_news_vector _final_30_1225.xlsx")
+        article = pd.read_excel(r"/app/article_news_vector _final_30_1225.xlsx")
         e = np.random.randint(len(np.array(article[article['label'] == 26]['content'])))
         text_1 = str(np.array(article[article['label'] == 26]['content'])[e])
         try:
