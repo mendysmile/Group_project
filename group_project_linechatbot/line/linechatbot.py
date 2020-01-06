@@ -243,8 +243,8 @@ def near_by_info(lat, lng):
 
 # 消息清單
 reply_message_list = [
-TextSendMessage(text="關注信我卡來，找到適合你的卡片。"),
-    TextSendMessage(text="哈囉！😊歡迎加入信我卡來，我們提供關於信用卡💳的各種資訊，歡迎點擊您有興趣的功能喔！😄"),
+TextSendMessage(text="關注信手卡來，找到適合你的卡片。"),
+    TextSendMessage(text="哈囉！😊歡迎加入信手卡來，我們提供關於信用卡💳的各種資訊，歡迎點擊您有興趣的功能喔！😄"),
     ImageSendMessage(original_content_url='https://i.imgur.com/YXXiCvZ.jpg',
     preview_image_url='https://i.imgur.com/Zs6btto.jpg'),
     ImageSendMessage(original_content_url='https://i.imgur.com/x0vZwjt.jpg',
@@ -319,17 +319,17 @@ TextSendMessage(text="不知道哪張信用卡適合自己嗎？😥讓我們來
      alt_text='Buttons template',
       template=ButtonsTemplate(
       thumbnail_image_url='https://i.imgur.com/lNxWpfE.png',
-        title='持卡狀況',
+        title='您想要什麼樣的卡片？',
         text='您是初次辦卡？還是已經有信用卡了呢？',
     actions=[
       {
         "type": "uri",
-        "label": "已持有信用卡",
+        "label": "已持有：類似卡片推薦",
         "uri": "https://.ngrok.io/card"
       },
       {
         "type": "uri",
-        "label": "初次辦卡小白",
+        "label": "初辦卡：卡片功能推薦",
         "uri": "https://.ngrok.io"
       }
     ],

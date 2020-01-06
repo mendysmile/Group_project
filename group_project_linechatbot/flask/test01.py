@@ -126,7 +126,7 @@ def result(id):
         card3 = list(coll2.find({"卡名02": C}))[0]
         del card3["_id"];del card3["熱度排名"]
         client.close()
-        return render_template('result.html',id=id,card1=card1,card2=card2,card3=card3,card4=card4,card5=card5)
+        return render_template('result.html',id=id,card1=card1,card2=card2,card3=card3)
 
 @app.route('/kibana')
 def kibana():

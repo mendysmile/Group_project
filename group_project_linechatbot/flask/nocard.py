@@ -66,13 +66,12 @@ while True:
             # print(x)
             a = list(x)
             b = sorted(a, reverse=True)
-            blist = b[0:5]
+            blist = b[0:3]
             blist
             c = []
             if sum(blist) == 0:
-                print(card_df.index[[12, 77, 101, 121, 196]])
-                result = {"id": id, "card1": card_df.index[12], "card2": card_df.index[77], "card3": card_df.index[101],
-                          "card4": card_df.index[121], "card5": card_df.index[196]}
+                print(card_df.index[[12, 77, 101]])
+                result = {"id": id, "card1": card_df.index[12], "card2": card_df.index[77], "card3": card_df.index[101]}
                 coll2 = db.no_card_result
                 coll2.insert_one(result)
                 client.close()
@@ -82,7 +81,7 @@ while True:
                     c.append(d)
                 print(list(card_df.index[c]))
                 card = list(card_df.index[c])
-                result = {"id": id, "card1": card[0], "card2": card[1], "card3": card[2], "card4": card[3],"card5": card[4]}
+                result = {"id": id, "card1": card[0], "card2": card[1], "card3": card[2]}
                 coll2 = db.no_card_result
                 coll2.insert_one(result)
                 client.close()

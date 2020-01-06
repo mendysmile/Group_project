@@ -25,11 +25,11 @@ def CF_Recommend_Item_Based(my_card):
     for  i in card_index_list:
         weighted_card_rec +=card_sim[i]           #將持有卡於其他卡的相似度相加成推薦權重
     weighted_score=pd.Series(weighted_card_rec).sort_values(ascending = False)
-    top_5_indexes=weighted_score.iloc[len(my_card):len(my_card)+5].index
+    top_3_indexes=weighted_score.iloc[len(my_card):len(my_card)+3].index
     rec_card=[]
-    for i in top_5_indexes:
+    for i in top_3_indexes:
         rec_card.append(indices[i])
-    result = {"id":id,"card1":rec_card[0],"card2":rec_card[1],"card3":rec_card[2],"card4":rec_card[3],"card5":rec_card[4]}
+    result = {"id":id,"card1":rec_card[0],"card2":rec_card[1],"card3":rec_card[2]}
     print(result)
     coll2 = db.no_card_result
     coll2.insert_one(result)
