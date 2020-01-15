@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Recommendation Assistant</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+    <style type="text/css">
+      .wrapper {
+        min-width:500px;
+        padding: 0 15px;
+      }
+      .navigation {
+        position:fixed;
+      }
+      .content {
+        background-color:#fff;
+      }
+       #himg img {
+       /* margin: 10px auto;*/
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="row">
+        <!-- col-md-2 navigation -->
+        <div class="navbar col-md-2 left flex-column bg-info text-white text-center ">
+        <div class="container">
+          <div id="himg" class=" text-center mt-5 mb-3">
+            <img src="https://svgsilh.com/svg/150175.svg" class="img-fluid">
+          </div>
+          <h3 class="navbar-brand"></h3>
+          <a class="nav-link" href="https://www.cardu.com.tw/rank/click.php" target="_blank">熱門卡片</a>
+        </div>
+      </div>
+        <!-- /col-md-2 navigation -->
+
+      <div class="col-md-10 content">
+        <!-- Movie contents -->
+        <h3>您好！😃請告訴我們您使用信用卡從事以下行為的頻率(5分最高，1分最低)，以便我們推薦您適合的卡片喔！👍</h3>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <div>
+
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+        <!-- /Movie contents -->
+
+        <!-- Recommend Movie -->
+        <h2>Recommended Card</h2>
+        <form action="/nocard" method="POST">
+        <from class="container mt-3">
+          <div class="row">
+            <div class="col-md-6 col-lg-3 mb-3">
+              <div class="card">
+                <img class="card-img-top img-fluid" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvRmnUdsglpNnsRbrTj6N3KCQBsdAXwC_ogq1cendD0Zep6l0k&s" width="150" height="200" alt="Card image cap">
+                <div class="card-block">
+                  <h4 class="card-title">卡活動(例如：首刷禮、加碼回饋等)</h4>
+                  <input type="radio" name="卡活動" value="5">5 <input type="radio" name="卡活動" value="4">4 <input type="radio" name="卡活動" value="3">3 <input type="radio" name="卡活動" value="2">2 <input type="radio" name="卡活動" value="1">1 <input type="radio" name="卡活動" value="0" checked="checked">0
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 mb-3">
+              <div class="card">
+                <img class="card-img-top img-fluid" src="/static/超商.jpg" width="100" height="100" alt="Card image cap">
+                <div class="card-block">
+                  <h4 class="card-title">超商</h4>
+                  <input type="radio" name="超商" value="5">5 <input type="radio" name="超商" value="4">4 <input type="radio" name="超商" value="3">3 <input type="radio" name="超商" value="2">2 <input type="radio" name="超商" value="1">1 <input type="radio" name="超商" value="0" checked="checked">0
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 mb-3">
+              <div class="card">
+                <img class="card-img-top img-fluid" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf3h-WEAleWhK0AFbr7appY1Bp7Km-Uwu9ZY7hWcia4rhBxwfn&s" width="120" height="100" alt="Card image cap">
+                <div class="card-block">
+                  <h4 class="card-title">交通</h4>
+                  <input type="radio" name="交通" value="5">5 <input type="radio" name="交通" value="4">4 <input type="radio" name="交通" value="3">3 <input type="radio" name="交通" value="2">2 <input type="radio" name="交通" value="1">1 <input type="radio" name="交通" value="0" checked="checked">0
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 mb-3">
+              <div class="card">
+                <img class="card-img-top img-fluid" src="/static/保險.jpg" width="200" height="100" alt="Card image cap">
+                <div class="card-block">
+                  <h4 class="card-title">保險</h4>
+                  <input type="radio" name="保險" value="5">5 <input type="radio" name="保險" value="4">4 <input type="radio" name="保險" value="3">3 <input type="radio" name="保險" value="2">2 <input type="radio" name="保險" value="1">1 <input type="radio" name="保險" value="0" checked="checked">0
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 mb-3">
+              <div class="card">
+                <img class="card-img-top img-fluid" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT94Arufl6hYLUV5biV20Q8G3LLQ9yxt6Tz8HkuEchdB4KZtB6x&s" width="200" height="100" alt="Card image cap">
+                <div class="card-block">
+                  <h4 class="card-title">加油</h4>
+                  <input type="radio" name="加油" value="5">5 <input type="radio" name="加油" value="4">4 <input type="radio" name="加油" value="3">3 <input type="radio" name="加油" value="2">2 <input type="radio" name="加油" value="1">1 <input type="radio" name="加油" value="0" checked="checked">0
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 mb-3">
+              <div class="card">
+                <img class="card-img-top img-fluid" src="/static/小丑.jpg" width="110" height="100" alt="Card image cap">
+                <div class="card-block">
+                  <h4 class="card-title">電影</h4>
+                  <input type="radio" name="電影" value="5">5 <input type="radio" name="電影" value="4">4 <input type="radio" name="電影" value="3">3 <input type="radio" name="電影" value="2">2 <input type="radio" name="電影" value="1">1 <input type="radio" name="電影" value="0" checked="checked">0
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 mb-3">
+              <div class="card">
+                <img class="card-img-top img-fluid" src="/static/機票.jpg" width="150" height="100" alt="Card image cap">
+                <div class="card-block">
+                  <h4 class="card-title">旅遊(例如：機票、飯店等)</h4>
+                  <input type="radio" name="旅遊機票飯店" value="5">5 <input type="radio" name="旅遊機票飯店" value="4">4 <input type="radio" name="旅遊機票飯店" value="3">3 <input type="radio" name="旅遊機票飯店" value="2">2 <input type="radio" name="旅遊機票飯店" value="1">1 <input type="radio" name="旅遊機票飯店" value="0" checked="checked">0
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 mb-3">
+              <div class="card">
+                <img class="card-img-top img-fluid" src="/static/10.jpg" width="200" height="100" alt="Card image cap">
+                <div class="card-block">
+                  <h4 class="card-title">行動支付</h4>
+                  <input type="radio" name="行動支付" value="5">5 <input type="radio" name="行動支付" value="4">4 <input type="radio" name="行動支付" value="3">3 <input type="radio" name="行動支付" value="2">2 <input type="radio" name="行動支付" value="1">1 <input type="radio" name="行動支付" value="0" checked="checked">0
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 mb-3">
+              <div class="card">
+                <img class="card-img-top img-fluid" src="/static/網購.jpg" width="180" height="100" alt="Card image cap">
+                <div class="card-block">
+                  <h4 class="card-title">網購</h4>
+                  <input type="radio" name="網購" value="5">5 <input type="radio" name="網購" value="4">4 <input type="radio" name="網購" value="3">3 <input type="radio" name="網購" value="2">2 <input type="radio" name="網購" value="1">1 <input type="radio" name="網購" value="0" checked="checked">0
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 mb-3">
+              <div class="card">
+                <img class="card-img-top img-fluid" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT3NVoF_gMCd8f0ReNKBSg8goUWh5CigLD1sfgK3KWZjE3TH3PFA&s" width="180" height="100" alt="Card image cap">
+                <div class="card-block">
+                  <h4 class="card-title">繳稅繳費</h4>
+                  <input type="radio" name="繳稅繳費" value="5">5 <input type="radio" name="繳稅繳費" value="4">4 <input type="radio" name="繳稅繳費" value="3">3 <input type="radio" name="繳稅繳費" value="2">2 <input type="radio" name="繳稅繳費" value="1">1 <input type="radio" name="繳稅繳費" value="0" checked="checked">0
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 mb-3">
+              <div class="card">
+                <img class="card-img-top img-fluid" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpROxTSifDdtpuelaTA5CJLU_lso0xHvqukka1NOAV066Ddn3y&s" width="130" height="100" alt="Card image cap">
+                <div class="card-block">
+                  <h4 class="card-title">現金回饋</h4>
+                  <input type="radio" name="現金回饋" value="5">5 <input type="radio" name="現金回饋" value="4">4 <input type="radio" name="現金回饋" value="3">3 <input type="radio" name="現金回饋" value="2">2 <input type="radio" name="現金回饋" value="1">1 <input type="radio" name="現金回饋" value="0" checked="checked">0
+
+                </div>
+              </div>
+            </div>
+
+
+
+          </div>
+          <input type="submit" name="sendBtn" value="Submit" >
+         </from>
+         </form>
+
+        </div>
+
+
+
+
+
+
+    <!-- jQuery first, then Tether, then Bootstrap JS. -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+  </body>
+</html>
